@@ -1,10 +1,10 @@
-import { useAuth } from "../contexts/AuthContext";
 import { Link } from "react-router-dom";
+
+import { useAuth } from "../contexts/AuthContext";
 
 import LogoutButton from "../components/LogoutButton";
 import FriendList from "../components/FriendList";
 import Loader from "../components/Loader";
-import { useEffect } from "react";
 
 export default function Home() {
   const { user, setUser, isLoading, setIsLoading } = useAuth();
@@ -21,8 +21,6 @@ export default function Home() {
       </div>
     );
   };
-
-  useEffect(() => setIsLoading(false), []);
 
   return (isLoading && <Loader />) || (
     <>
