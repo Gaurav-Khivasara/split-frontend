@@ -1,38 +1,37 @@
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
-import { getUserByToken } from "../apis/api";
+import { fetchWithAuth } from "../apis/api";
 
-const serverLink = import.meta.env.VITE_SERVER_LINK;
+// const serverLink = import.meta.env.VITE_SERVER_LINK;
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   let loggedIn = false;
 
   const fetchUser = useCallback(async () => {
     setIsLoading(true);
-    
+
     try {
-      const response = await getUserByToken();
+      // const response = await getUserByToken();
+      // const token = localStorage.getItem("token");
       // const response = await fetch(`${serverLink}/api/users/get-by-token`, {
       //   headers: {
       //     Authorization: `Bearer ${token}`
       //   }
       // });
+      const response = await fetchWithAuth({ path: `/api/users/get-by-token` });
 
-      if (response.status === 401) {
-        throw new Error("401: Unauthorized\nSession expired or Invalid token!");
-      }
+      console.log("res", response);
+      // console.log("res.status", response.status);
+      // console.log("res.ok", response.ok);
+      // console.log("res.user", response.user);
 
-      // if (!response.ok) {
-      //   throw new Error("Session expired or Invalid token!");
-      // }
-
-      setUser(response.data.user);
-
+      setUser(response.user);
+      
       if (loggedIn) {
         toast.success("Logged in.");
         loggedIn = false;
