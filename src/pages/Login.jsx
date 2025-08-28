@@ -1,13 +1,10 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { useEffect } from "react";
 
 const serverLink = import.meta.env.VITE_SERVER_LINK;
 
 export default function Login() {
-  const { user, setIsLoading } = useAuth();
-
-  useEffect(() => setIsLoading(false), []);
+  const { user } = useAuth();
 
   return (
     <>
