@@ -1,12 +1,6 @@
 import toast from "react-hot-toast";
-// import axiosClient from "./axiosClient";
 
 const serverLink = import.meta.env.VITE_SERVER_LINK;
-
-// export const getUserByToken = () => axiosClient.get("/users/get-by-token");
-
-// export const getAllFriendsByUser = () => axiosClient.get("/friends/get-all-by-user");
-// export const addFriend = (body) => axiosClient.post("/friends/add", body);
 
 export const fetchWithAuth = async ({ path, method = "GET", payload }) => {
   const token = localStorage.getItem("token");

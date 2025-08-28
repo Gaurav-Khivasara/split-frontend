@@ -3,8 +3,6 @@ import toast from "react-hot-toast";
 
 import { fetchWithAuth } from "../apis/api";
 
-// const serverLink = import.meta.env.VITE_SERVER_LINK;
-
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
@@ -16,19 +14,9 @@ export const AuthProvider = ({ children }) => {
     setIsLoading(true);
 
     try {
-      // const response = await getUserByToken();
-      // const token = localStorage.getItem("token");
-      // const response = await fetch(`${serverLink}/api/users/get-by-token`, {
-      //   headers: {
-      //     Authorization: `Bearer ${token}`
-      //   }
-      // });
       const response = await fetchWithAuth({ path: `/api/users/get-by-token` });
 
       console.log("res", response);
-      // console.log("res.status", response.status);
-      // console.log("res.ok", response.ok);
-      // console.log("res.user", response.user);
 
       setUser(response.user);
       
@@ -37,7 +25,6 @@ export const AuthProvider = ({ children }) => {
         loggedIn = false;
       }
     } catch (err) {
-      // Handled in axiosClient
       // console.error("err", err);
       localStorage.removeItem("token");
       setUser(null);
@@ -52,7 +39,6 @@ export const AuthProvider = ({ children }) => {
 
     if (token) {
       localStorage.setItem("token", token);
-      // toast.success("Logged in.");
       loggedIn = true;
       window.history.replaceState({}, document.title, "/");
     }
