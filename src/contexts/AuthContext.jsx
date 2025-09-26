@@ -1,59 +1,57 @@
-import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 import { fetchWithAuth } from "../apis/api";
+// import Loader from "../components/Loader";
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  let loggedIn = false;
-
-  const fetchUser = useCallback(async () => {
-    setIsLoading(true);
-
-    try {
-      const response = await fetchWithAuth({ path: `/api/users/get-by-token` });
-
-      console.log("res", response);
-
-      setUser(response.user);
-      
-      if (loggedIn) {
-        toast.success("Logged in.");
-        loggedIn = false;
-      }
-    } catch (err) {
-      // console.error("err", err);
-      localStorage.removeItem("token");
-      setUser(null);
-    } finally {
-      setIsLoading(false);
-    }
-  });
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get("token");
+    const fetchUser = async () => {
+      try {
+        const response = await fetchWithAuth({ path: "/api/users/get" });
 
-    if (token) {
-      localStorage.setItem("token", token);
-      loggedIn = true;
+        // console.log("authFetchUser:", response);
+        setUser(response?.user);
+
+        if (response?.user) {
+          toast.success("Logged in.");
+        }
+      } catch (err) {
+        console.error("authFetchUser error:", err);
+        localStorage.removeItem("token");
+        setUser(null);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const tokenParam = urlParams.get("token");
+
+    if (tokenParam) {
+      localStorage.setItem("token", tokenParam);
+      // Token aa gaya lekin user nahi aya, uske pehle 
+      // // login nahi ho sakta
+      // // S
       window.history.replaceState({}, document.title, "/");
     }
-  }, [fetchUser]);
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      fetchUser(token);
-    }
+    fetchUser();
+    // const token = localStorage.getItem("token");
+    // if (token) {
+    //   fetchUser();
+    // }
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, setUser, isLoading, setIsLoading }} >
-      {children}
+    <AuthContext.Provider value={{ user, setUser, isLoading }} >
+      {/* {isLoading ? <Loader /> : children} */}
+      {isLoading ? <div>Loading...</div> : children}
     </AuthContext.Provider>
   );
 };
