@@ -2,7 +2,9 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
 import Navbar from "./components/Navbar";
-// import LeftSidebar from "./components/LeftSidebar";
+import LeftSection from "./components/LeftSection";
+import MainSection from "./components/MainSection";
+import RightSection from "./components/RightSection";
 // import Dashboard from "./components/Dashboard";
 // import Login from "./pages/Login";
 // import LoginFailure from "./pages/LoginFailure";
@@ -21,13 +23,11 @@ export default function App() {
       />
       <BrowserRouter>
         <Navbar />
-        <br />
         <div style={{ display: "flex", gap: "16px" }} >
-          {/* <LeftSidebar /> */}
+          <LeftSection />
           <Routes>
             {/* <Route path="/login" element={<SectionWrapper element={<Login />} />} /> */}
-            <Route path="" element={<div>Login</div>} />
-            {/* <Route path="" element={<Main element={<Login />} />} /> */}
+            <Route path="" element={<MainSection element={<div>Login</div>} />} />
             {/* <Route path="" element={<SectionWrapper element={<Login />} />} />
             <Route path="/auth/callback" element={<SectionWrapper element={<Dashboard />} />} />
             <Route path="/login/failure" element={<LoginFailure />} />
@@ -36,6 +36,7 @@ export default function App() {
             {/* <Route path="/test" element={<TestPage />} /> */}
             {/* <Route path="*" element={<PageNotFound />} /> */}
           </Routes>
+          <RightSection />
         </div>
       </BrowserRouter>
     </>
